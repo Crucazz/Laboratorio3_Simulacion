@@ -26,32 +26,10 @@ H2 = d/(e*s - f);
 [y_esperado,t_esperado] = step(feedback(H1, H2),20);
 [y_calculado,t_calculado] = step(H3(2),20);
 
-tiledlayout(2,1)
-% Top plot
-ax1 = nexttile;
-plot(ax1,t_calculado,y_esperado)
-title(ax1,'Comportamiento esperado')
-ylabel(ax1,'y(t)','FontSize',11);
-xlabel(ax1,'Tiempo [s]','FontSize',11);
-ax1.FontSize = 14;
-%ax1.XColor = 'red';
-box(ax1,'on');
-grid(ax1,'on');
-hold(ax1,'off');
-
-% Bottom plot
-ax2 = nexttile;
-plot(ax2,t_calculado,y_calculado)
-title(ax2,'Comportamiento Conseguido')
-ylabel(ax2,'y(t)','FontSize',11);
-xlabel(ax2,'Tiempo [s]','FontSize',11);
-ax2.FontSize = 14;
-%ax2.XColor = 'blue';
-box(ax2,'on');
-grid(ax2,'on');
-hold(ax2,'off');
-
-
+titulo="Comportamiento sistema con retroalimentación";
+var1="Comportamiento esperado";
+var2="Comportamiento conseguido";
+createfigure1(t_esperado,y_esperado,t_calculado,y_calculado,titulo,var1,var2)
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
@@ -74,12 +52,18 @@ rs2 = 0.1;
 [A1,B1,C1,D1] = bam2(a1,a2,r1,r2,rs1,rs2);
 H4 = mab(A1,B1,C1,D1);
 
-[y2_1,t2_1]=step(H4(1));
-[y2_2,t2_2]=impulse(H4(2));
-[y2_3,t2_3]=lsim(H4(2),u,t);
+[y2_11,t2_11]=step(H4(1));
+[y2_12,t2_12]=step(H4(2));
+[y2_21,t2_21]=impulse(H4(1));
+[y2_22,t2_22]=impulse(H4(2));
+[y2_31,t2_31]=lsim(H4(1),u,t);
+[y2_32,t2_32]=lsim(H4(2),u,t);
 
 
 %grafico de los resultados
+createfigure2(t2_11,y2_11,t2_12,y2_12)
+createfigure3(t2_21,y2_21,t2_22,y2_22)
+createfigure4(t2_31,y2_31,t2_32,y2_32)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 %                   Parte 3            
@@ -93,10 +77,33 @@ t3=2;
 M1_z = c2d(H4(1), t1, 'zoh ');
 M1_f = c2d(H4(1), t1, 'foh ');
 
+
+[y3_11,t3_11]=step(M1_z,4);
+[y3_12,t3_12]=step(M1_f,4);
+titulo="Muestreo con t=0.001";
+var1="ZOH";
+var2="FOH";
+createfigure1(t3_11,y3_11,t3_12,y3_12,titulo,var1,var2)
+
+
 %segundo tiempo de muestro
 M2_z = c2d(H4(1), t2, 'zoh ');
 M2_f = c2d(H4(1), t2, 'foh ');
 
+[y3_21,t3_21]=step(M2_z,4);
+[y3_22,t3_22]=step(M2_f,4);
+titulo="Muestreo con t=0.1";
+var1="ZOH";
+var2="FOH";
+createfigure1(t3_21,y3_21,t3_22,y3_22,titulo,var1,var2)
+
 %tercer tiempo de muestreo
 M3_z = c2d(H4(1), t3, 'zoh ');
 M3_f = c2d(H4(1), t3, 'foh ');
+
+[y3_31,t3_31]=step(M3_z,5);
+[y3_32,t3_32]=step(M3_f,5);
+titulo="Muestreo con t=2";
+var1="ZOH";
+var2="FOH";
+createfigure1(t3_31,y3_31,t3_32,y3_32,titulo,var1,var2)
